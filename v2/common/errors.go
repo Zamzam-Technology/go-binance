@@ -1,6 +1,7 @@
 package common
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -19,4 +20,8 @@ func (e APIError) Error() string {
 func IsAPIError(e error) bool {
 	_, ok := e.(*APIError)
 	return ok
+}
+
+func CreateErrorMandatoryField(field string) error {
+	return errors.New(fmt.Sprintf("%s: field is MANDATORY", field))
 }

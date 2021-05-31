@@ -7,6 +7,8 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	broker "github.com/adshao/go-binance/v2/borker"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -192,6 +194,10 @@ func NewFuturesClient(apiKey, secretKey string) *futures.Client {
 // NewDeliveryClient initialize client for coin-M futures API
 func NewDeliveryClient(apiKey, secretKey string) *delivery.Client {
 	return delivery.NewClient(apiKey, secretKey)
+}
+
+func NewBrokerClient(apiKey, secretKey string, writer io.Writer) *broker.Client {
+	return broker.NewClient(apiKey, secretKey, writer)
 }
 
 type doFunc func(req *http.Request) (*http.Response, error)
@@ -623,4 +629,44 @@ func (c *Client) NewListDustLogService() *ListDustLogService {
 // NewDustTransferService init dust transfer service
 func (c *Client) NewDustTransferService() *DustTransferService {
 	return &DustTransferService{c: c}
+}
+
+// NewListSwapPoolsService init list swap pool service
+func (c *Client) NewListSwapPoolsService() *ListSwapPoolsService {
+	return &ListSwapPoolsService{c: c}
+}
+
+// NewRequestQuoteService init request quote service
+func (c *Client) NewRequestQuoteService() *RequestQuoteService {
+	return &RequestQuoteService{c: c}
+}
+
+// NewMakeSwapService init make swap service
+func (c *Client) NewMakeSwapService() *MakeSwapService {
+	return &MakeSwapService{c: c}
+}
+
+// NewSwapHistoryService init new swap history service
+func (c *Client) NewSwapHistoryService() *SwapHistoryService {
+	return &SwapHistoryService{c: c}
+}
+
+// NewLiquidityInformationService init new liquidity information service
+func (c *Client) NewLiquidityInformationService() *LiquidityInformationService {
+	return &LiquidityInformationService{c: c}
+}
+
+// NewAddLiquidityService init new add liquidity service
+func (c *Client) NewAddLiquidityService() *AddLiquidityService {
+	return &AddLiquidityService{c: c}
+}
+
+// NewRemoveLiquidityService init new remove liquidity service
+func (c *Client) NewRemoveLiquidityService() *RemoveLiquidityService {
+	return &RemoveLiquidityService{c: c}
+}
+
+// NewLiquidityOperationService init new liquidity operation service
+func (c *Client) NewLiquidityOperationService() *LiquidityOperationService {
+	return &LiquidityOperationService{c: c}
 }
