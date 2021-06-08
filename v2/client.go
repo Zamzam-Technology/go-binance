@@ -7,7 +7,7 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
-	broker "github.com/adshao/go-binance/v2/borker"
+	broker "github.com/Zamzam-Technology/go-binance/v2/borker"
 	"io"
 	"io/ioutil"
 	"log"
@@ -16,9 +16,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/adshao/go-binance/v2/common"
-	"github.com/adshao/go-binance/v2/delivery"
-	"github.com/adshao/go-binance/v2/futures"
+	"github.com/Zamzam-Technology/go-binance/v2/common"
+	"github.com/Zamzam-Technology/go-binance/v2/delivery"
+	"github.com/Zamzam-Technology/go-binance/v2/futures"
 	"github.com/bitly/go-simplejson"
 )
 

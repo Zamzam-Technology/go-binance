@@ -7,7 +7,7 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
-	"github.com/adshao/go-binance/v2/common"
+	"github.com/Zamzam-Technology/go-binance/v2/common"
 	"io"
 	"io/ioutil"
 	"log"
