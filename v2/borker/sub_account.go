@@ -23,7 +23,7 @@ type EnableMarginToSubAccountResponse struct {
 
 // CreateApiKeyRequest is a request struct
 type CreateApiKeyRequest struct {
-	SubAccountID int
+	SubAccountID string
 	CanTrade     bool
 	MarginTrade  bool
 	FuturesTrade bool
@@ -41,13 +41,13 @@ type CreateApiKeyResponse struct {
 
 // DeleteSubApiKeyRequest is a request struct
 type DeleteSubApiKeyRequest struct {
-	SubAccountID int
+	SubAccountID string
 	ApiKey       string
 }
 
 // ChangeApiPermissionRequest is a request struct
 type ChangeApiPermissionRequest struct {
-	SubAccountID     int    `json:"subaccountId"`
+	SubAccountID     string `json:"subaccountId"`
 	SubAccountApiKey string `json:"subAccountApiKey"`
 	CatTrade         bool   `json:"catTrade"`
 	MarginTrade      bool   `json:"marginTrade"`
@@ -64,7 +64,7 @@ type ChangeApiPermissionResponse struct {
 }
 
 type ChangeSubAccountCommissionRequest struct {
-	SubAccountID          int
+	SubAccountID          string
 	MakerCommission       float32
 	TakerCommission       float32
 	MarginMakerCommission float32
@@ -82,8 +82,8 @@ type ChangeSubAccountCommissionResponse struct {
 
 // SubAccountTransferRequest is a request struct
 type SubAccountTransferRequest struct {
-	FromID           int
-	ToID             int
+	FromID           string
+	ToID             string
 	ClientTransferID string
 	Asset            string
 	Amount           float64
