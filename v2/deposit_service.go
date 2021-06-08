@@ -95,9 +95,9 @@ type Deposit struct {
 //
 // See https://binance-docs.github.io/apidocs/spot/en/#deposit-address-supporting-network-user_data
 type GetDepositsAddressService struct {
-	c      *Client
-	asset  string
-	status *bool
+	c       *Client
+	asset   string
+	network string
 }
 
 // Asset sets the asset parameter (MANDATORY).
@@ -106,9 +106,9 @@ func (s *GetDepositsAddressService) Asset(v string) *GetDepositsAddressService {
 	return s
 }
 
-// Status sets the status parameter.
-func (s *GetDepositsAddressService) Status(v bool) *GetDepositsAddressService {
-	s.status = &v
+// Network sets the status parameter.
+func (s *GetDepositsAddressService) Network(net string) *GetDepositsAddressService {
+	s.network = net
 	return s
 }
 
@@ -116,12 +116,12 @@ func (s *GetDepositsAddressService) Status(v bool) *GetDepositsAddressService {
 func (s *GetDepositsAddressService) Do(ctx context.Context) (*GetDepositAddressResponse, error) {
 	r := &request{
 		method:   "GET",
-		endpoint: "/wapi/v3/depositAddress.html",
+		endpoint: "/sapi/v1/capital/deposit/address",
 		secType:  secTypeSigned,
 	}
-	r.setParam("asset", s.asset)
-	if v := s.status; v != nil {
-		r.setParam("status", *v)
+	r.setParam("coin", s.asset)
+	if s.network != "" {
+		r.setParam("network", s.network)
 	}
 
 	data, err := s.c.callAPI(ctx, r)
@@ -139,9 +139,8 @@ func (s *GetDepositsAddressService) Do(ctx context.Context) (*GetDepositAddressR
 
 // GetDepositAddressResponse represents a response from GetDepositsAddressService.
 type GetDepositAddressResponse struct {
-	Success    bool   `json:"success"`
-	Address    string `json:"address"`
-	AddressTag string `json:"addressTag"`
-	Asset      string `json:"asset"`
-	URL        string `json:"url"`
+	Address string `json:"address"`
+	Coin    string `json:"coin"`
+	Tag     string `json:"tag"`
+	Url     string `json:"url"`
 }
