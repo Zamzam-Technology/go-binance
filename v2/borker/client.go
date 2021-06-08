@@ -122,7 +122,7 @@ func (c *Client) CreateApiKeyForSub(ctx context.Context, req CreateApiKeyRequest
 		endpoint: "/sapi/v1/broker/subAccountApi",
 		secType:  secTypeSigned,
 	}
-	if req.SubAccountID > 0 {
+	if req.SubAccountID != "" {
 		r.setParam("subAccountId", req.SubAccountID)
 	} else {
 		return nil, common.CreateErrorMandatoryField("subAccountId")
@@ -150,7 +150,7 @@ func (c *Client) DeleteSubApiKey(ctx context.Context, req DeleteSubApiKeyRequest
 		endpoint: "/sapi/v1/broker/subAccountApi",
 		secType:  secTypeSigned,
 	}
-	if req.SubAccountID > 0 {
+	if req.SubAccountID != "" {
 		r.setParam("subAccountId", req.SubAccountID)
 	} else {
 		return common.CreateErrorMandatoryField("subAccountId")
@@ -175,7 +175,7 @@ func (c *Client) ChangeSubAccountApiPermission(ctx context.Context, req ChangeAp
 		secType:  secTypeSigned,
 	}
 
-	if req.SubAccountID > 0 {
+	if req.SubAccountID != "" {
 		r.setParam("subAccountId", req.SubAccountID)
 	} else {
 		return nil, common.CreateErrorMandatoryField("subAccountId")
@@ -210,7 +210,7 @@ func (c *Client) ChangeSubAccountCommission(ctx context.Context, req ChangeSubAc
 		secType:  secTypeSigned,
 	}
 
-	if req.SubAccountID > 0 {
+	if req.SubAccountID != "" {
 		r.setParam("subAccountId", req.SubAccountID)
 	} else {
 		return nil, common.CreateErrorMandatoryField("subAccountId")
@@ -240,12 +240,12 @@ func (c *Client) SubAccountTransfer(ctx context.Context, req SubAccountTransferR
 		secType:  secTypeSigned,
 	}
 
-	if req.FromID == 0 && req.ToID == 0 {
+	if req.FromID == "" && req.ToID == "" {
 		return nil, common.CreateErrorMandatoryField("fromID or toID")
 	}
-	if req.FromID != 0 && req.ToID == 0 {
+	if req.FromID != "" && req.ToID == "" {
 		r.setParam("fromId", req.FromID)
-	} else if req.ToID != 0 && req.FromID == 0 {
+	} else if req.ToID != "" && req.FromID == "" {
 		r.setParam("toId", req.ToID)
 	} else {
 		r.setParam("fromId", req.FromID)
