@@ -89,8 +89,35 @@ type SubAccountTransferRequest struct {
 	Amount           float64
 }
 
+// SubAccountTransferHistoryRequest is a request struct
+type SubAccountTransferHistoryRequest struct {
+	FromID           string
+	ToID             string
+	ClientTransferID string
+	ShowAllStatus    bool
+	StartTime        int64
+	EndTime          int64
+	Page             int
+	Limit            int
+}
+
 // SubAccountTransferResponse is a response struct
 type SubAccountTransferResponse struct {
 	TxnID        string `json:"txnId"`
 	ClientTranID string `json:"clientTranId"`
+}
+
+// TransferHistoryResponse is transfer history response
+type TransferHistoryResponse []*Transfer
+
+//Transfer is a transfer struct
+type Transfer struct {
+	FromId       string `json:"fromId"`
+	ToId         string `json:"toId"`
+	Asset        string `json:"asset"`
+	Qty          string `json:"qty"`
+	Time         int64  `json:"time"`
+	TxnId        string `json:"txnId"`
+	ClientTranId string `json:"clientTranId"`
+	Status       string `json:"status"`
 }

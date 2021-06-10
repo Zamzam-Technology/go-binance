@@ -280,6 +280,49 @@ func (c *Client) SubAccountTransfer(ctx context.Context, req SubAccountTransferR
 	return res, nil
 }
 
+// TransferHistory makes request
+func (c *Client) TransferHistory(ctx context.Context, req SubAccountTransferHistoryRequest, opts ...RequestOption) (res *TransferHistoryResponse, err error) {
+	r := &request{
+		method:   http.MethodGet,
+		endpoint: "/sapi/v1/broker/transfer",
+		secType:  secTypeSigned,
+	}
+	if req.FromID != "" {
+		r.setParam("fromId", req.FromID)
+	}
+	if req.ToID != "" {
+		r.setParam("toId", req.ToID)
+	}
+	if req.ClientTransferID != "" {
+		r.setParam("clientTranId", req.ClientTransferID)
+	}
+	if req.StartTime > 0 {
+		r.setParam("startTime", req.StartTime)
+	}
+	if req.EndTime > 0 {
+		r.setParam("endTime", req.EndTime)
+	}
+	if req.Limit > 0 {
+		r.setParam("limit", req.Limit)
+	}
+	if req.Page > 0 {
+		r.setParam("page", req.Page)
+	}
+
+	data, err := c.callAPI(ctx, r, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	res = new(TransferHistoryResponse)
+	err = json.Unmarshal(data, &res)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
 // callAPI makes API call
 func (c *Client) callAPI(ctx context.Context, r *request, opts ...RequestOption) (data []byte, err error) {
 	err = c.parseRequest(r, opts...)
