@@ -281,7 +281,7 @@ func (c *Client) SubAccountTransfer(ctx context.Context, req SubAccountTransferR
 }
 
 // TransferHistory makes request
-func (c *Client) TransferHistory(ctx context.Context, req SubAccountTransferHistoryRequest, opts ...RequestOption) (res *TransferHistoryResponse, err error) {
+func (c *Client) TransferHistory(ctx context.Context, req SubAccountTransferHistoryRequest, opts ...RequestOption) (transfers []*Transfer, err error) {
 	r := &request{
 		method:   http.MethodGet,
 		endpoint: "/sapi/v1/broker/transfer",
@@ -314,13 +314,13 @@ func (c *Client) TransferHistory(ctx context.Context, req SubAccountTransferHist
 		return nil, err
 	}
 
-	res = new(TransferHistoryResponse)
+	res := new(TransferHistoryResponse)
 	err = json.Unmarshal(data, &res)
 	if err != nil {
 		return nil, err
 	}
-
-	return res, nil
+	transfers = *res
+	return transfers, nil
 }
 
 // callAPI makes API call

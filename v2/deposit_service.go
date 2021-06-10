@@ -92,24 +92,25 @@ func (s *ListDepositsService) Do(ctx context.Context) (deposits []*Deposit, err 
 	if err != nil {
 		return
 	}
-	return res.Deposits, nil
+	deposits = *res
+	return deposits, nil
 }
 
 // DepositHistoryResponse represents a response from ListDepositsService.
-type DepositHistoryResponse struct {
-	Success  bool       `json:"success"`
-	Deposits []*Deposit `json:"depositList"`
-}
+type DepositHistoryResponse []*Deposit
 
 // Deposit represents a single deposit entry.
 type Deposit struct {
-	InsertTime int64   `json:"insertTime"`
-	Amount     float64 `json:"amount"`
-	Asset      string  `json:"asset"`
-	Address    string  `json:"address"`
-	AddressTag string  `json:"addressTag"`
-	TxID       string  `json:"txId"`
-	Status     int     `json:"status"`
+	Amount       string `json:"amount"`
+	Coin         string `json:"coin"`
+	Network      string `json:"network"`
+	Status       int    `json:"status"`
+	Address      string `json:"address"`
+	AddressTag   string `json:"addressTag"`
+	TxID         string `json:"txId"`
+	InsertTime   int64  `json:"insertTime"`
+	TransferType int    `json:"transferType"`
+	ConfirmTimes string `json:"confirmTimes"`
 }
 
 // GetDepositsAddressService retrieves the details of a deposit address.
@@ -117,13 +118,13 @@ type Deposit struct {
 // See https://binance-docs.github.io/apidocs/spot/en/#deposit-address-supporting-network-user_data
 type GetDepositsAddressService struct {
 	c       *Client
-	asset   string
+	coin    string
 	network string
 }
 
-// Asset sets the asset parameter (MANDATORY).
-func (s *GetDepositsAddressService) Asset(v string) *GetDepositsAddressService {
-	s.asset = v
+// Coin sets the coin parameter (MANDATORY).
+func (s *GetDepositsAddressService) Coin(v string) *GetDepositsAddressService {
+	s.coin = v
 	return s
 }
 
@@ -140,7 +141,7 @@ func (s *GetDepositsAddressService) Do(ctx context.Context) (*GetDepositAddressR
 		endpoint: "/sapi/v1/capital/deposit/address",
 		secType:  secTypeSigned,
 	}
-	r.setParam("coin", s.asset)
+	r.setParam("coin", s.coin)
 	if s.network != "" {
 		r.setParam("network", s.network)
 	}
@@ -163,5 +164,5 @@ type GetDepositAddressResponse struct {
 	Address string `json:"address"`
 	Coin    string `json:"coin"`
 	Tag     string `json:"tag"`
-	Url     string `json:"url"`
+	URL     string `json:"url"`
 }
