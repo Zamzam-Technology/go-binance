@@ -119,21 +119,35 @@ type CreateWithdrawResponse struct {
 // See https://binance-docs.github.io/apidocs/spot/en/#withdraw-history-supporting-network-user_data
 type ListWithdrawsService struct {
 	c         *Client
-	asset     *string
+	coin      *string
 	status    *int
+	offset    *int
+	limit     *int
 	startTime *int64
 	endTime   *int64
 }
 
-// Asset sets the asset parameter.
-func (s *ListWithdrawsService) Asset(asset string) *ListWithdrawsService {
-	s.asset = &asset
+// Coin sets the asset parameter.
+func (s *ListWithdrawsService) Coin(coin string) *ListWithdrawsService {
+	s.coin = &coin
 	return s
 }
 
 // Status sets the status parameter.
 func (s *ListWithdrawsService) Status(status int) *ListWithdrawsService {
 	s.status = &status
+	return s
+}
+
+// Offset sets the offset parameter
+func (s *ListWithdrawsService) Offset(offset int) *ListWithdrawsService {
+	s.offset = &offset
+	return s
+}
+
+// Limit sets the limit parameter
+func (s *ListWithdrawsService) Limit(limit int) *ListWithdrawsService {
+	s.limit = &limit
 	return s
 }
 
@@ -155,11 +169,11 @@ func (s *ListWithdrawsService) EndTime(endTime int64) *ListWithdrawsService {
 func (s *ListWithdrawsService) Do(ctx context.Context) (withdraws []*Withdraw, err error) {
 	r := &request{
 		method:   "GET",
-		endpoint: "/wapi/v3/withdrawHistory.html",
+		endpoint: "/sapi/v1/capital/withdraw/history",
 		secType:  secTypeSigned,
 	}
-	if s.asset != nil {
-		r.setParam("asset", *s.asset)
+	if s.coin != nil {
+		r.setParam("coin", *s.coin)
 	}
 	if s.status != nil {
 		r.setParam("status", *s.status)
@@ -170,6 +184,12 @@ func (s *ListWithdrawsService) Do(ctx context.Context) (withdraws []*Withdraw, e
 	if s.endTime != nil {
 		r.setParam("endTime", *s.endTime)
 	}
+	if s.offset != nil {
+		r.setParam("offset", *s.offset)
+	}
+	if s.limit != nil {
+		r.setParam("limit", *s.limit)
+	}
 	data, err := s.c.callAPI(ctx, r)
 	if err != nil {
 		return
@@ -179,26 +199,24 @@ func (s *ListWithdrawsService) Do(ctx context.Context) (withdraws []*Withdraw, e
 	if err != nil {
 		return
 	}
-	return res.Withdraws, nil
+	withdraws = *res
+	return withdraws, nil
 }
 
 // WithdrawHistoryResponse represents a response from ListWithdrawsService.
-type WithdrawHistoryResponse struct {
-	Withdraws []*Withdraw `json:"withdrawList"`
-	Success   bool        `json:"success"`
-}
+type WithdrawHistoryResponse []*Withdraw
 
 // Withdraw represents a single withdraw entry.
 type Withdraw struct {
-	ID              string  `json:"id"`
-	WithdrawOrderID string  `json:"withdrawOrderID"`
-	Amount          float64 `json:"amount"`
-	TransactionFee  float64 `json:"transactionFee"`
-	Address         string  `json:"address"`
-	AddressTag      string  `json:"addressTag"`
-	TxID            string  `json:"txId"`
-	Asset           string  `json:"asset"`
-	ApplyTime       int64   `json:"applyTime"`
-	Network         string  `json:"network"`
-	Status          int     `json:"status"`
+	Address         string `json:"address"`
+	Amount          string `json:"amount"`
+	ApplyTime       string `json:"applyTime"`
+	Coin            string `json:"coin"`
+	ID              string `json:"id"`
+	WithdrawOrderID string `json:"withdrawOrderId"`
+	Network         string `json:"network"`
+	TransferType    int    `json:"transferType"`
+	Status          int    `json:"status"`
+	TransactionFee  string `json:"transactionFee"`
+	TxId            string `json:"txId"`
 }
