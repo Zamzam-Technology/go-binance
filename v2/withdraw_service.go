@@ -10,7 +10,7 @@ import (
 // See https://binance-docs.github.io/apidocs/spot/en/#withdraw
 type CreateWithdrawService struct {
 	c                  *Client
-	asset              string
+	coin               string
 	withdrawOrderID    *string
 	network            *string
 	address            string
@@ -20,9 +20,9 @@ type CreateWithdrawService struct {
 	name               *string
 }
 
-// Asset sets the asset parameter (MANDATORY).
-func (s *CreateWithdrawService) Asset(v string) *CreateWithdrawService {
-	s.asset = v
+// Coin sets the asset parameter (MANDATORY).
+func (s *CreateWithdrawService) Coin(v string) *CreateWithdrawService {
+	s.coin = v
 	return s
 }
 
@@ -72,10 +72,10 @@ func (s *CreateWithdrawService) Name(v string) *CreateWithdrawService {
 func (s *CreateWithdrawService) Do(ctx context.Context) (*CreateWithdrawResponse, error) {
 	r := &request{
 		method:   "POST",
-		endpoint: "/wapi/v3/withdraw.html",
+		endpoint: "/sapi/v1/capital/withdraw/apply",
 		secType:  secTypeSigned,
 	}
-	r.setParam("asset", s.asset)
+	r.setParam("coin", s.coin)
 	r.setParam("address", s.address)
 	r.setParam("amount", s.amount)
 	if v := s.withdrawOrderID; v != nil {
@@ -109,9 +109,7 @@ func (s *CreateWithdrawService) Do(ctx context.Context) (*CreateWithdrawResponse
 
 // CreateWithdrawResponse represents a response from CreateWithdrawService.
 type CreateWithdrawResponse struct {
-	ID      string `json:"id"`
-	Msg     string `json:"msg"`
-	Success bool   `json:"success"`
+	ID string `json:"id"`
 }
 
 // ListWithdrawsService fetches withdraw history.

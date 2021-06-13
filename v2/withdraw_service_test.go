@@ -17,8 +17,6 @@ func TestWithdrawService(t *testing.T) {
 func (s *withdrawServiceTestSuite) TestCreateWithdraw() {
 	data := []byte(`
 	{
-		"msg": "success",
-		"success": true,
 		"id":"7213fea8e94b4a5593d507237e5a555b"
 	}
 	`)
@@ -35,7 +33,7 @@ func (s *withdrawServiceTestSuite) TestCreateWithdraw() {
 	name := "eth"
 	s.assertReq(func(r *request) {
 		e := newSignedRequest().setParams(params{
-			"asset":              asset,
+			"coin":               asset,
 			"withdrawOrderId":    withdrawOrderID,
 			"network":            network,
 			"address":            address,
@@ -48,7 +46,7 @@ func (s *withdrawServiceTestSuite) TestCreateWithdraw() {
 	})
 
 	res, err := s.client.NewCreateWithdrawService().
-		Asset(asset).
+		Coin(asset).
 		WithdrawOrderID(withdrawOrderID).
 		Network(network).
 		Address(address).
@@ -61,8 +59,6 @@ func (s *withdrawServiceTestSuite) TestCreateWithdraw() {
 	r := s.r()
 	r.NoError(err)
 	r.Equal("7213fea8e94b4a5593d507237e5a555b", res.ID)
-	r.Equal("success", res.Msg)
-	r.True(res.Success)
 }
 
 func (s *withdrawServiceTestSuite) TestListWithdraws() {
