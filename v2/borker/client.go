@@ -7,6 +7,7 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"github.com/Zamzam-Technology/go-binance/v2"
 	"github.com/Zamzam-Technology/go-binance/v2/common"
 	"io"
 	"io/ioutil"
@@ -21,7 +22,10 @@ const (
 	signatureKey  = "signature"
 	recvWindowKey = "recvWindow"
 
-	baseURL        = "https://api.binance.com"
+	// Endpoints
+	baseAPIMainURL    = "https://api.binance.com"
+	baseAPITestnetURL = "https://testnet.binance.vision"
+
 	defaultTimeout = 5 * time.Second
 )
 
@@ -46,7 +50,7 @@ func NewClient(apiKey, secretKey string, writer io.Writer) *Client {
 		},
 		apiKey:    apiKey,
 		secretKey: secretKey,
-		BaseURL:   baseURL,
+		BaseURL:   getAPIEndpoint(),
 		Logger:    log.New(writer, "Binance-Broker", log.LstdFlags),
 	}
 }
@@ -440,4 +444,12 @@ func currentTimestamp() int64 {
 // FormatTimestamp formats a time into Unix timestamp in milliseconds, as requested by Binance.
 func FormatTimestamp(t time.Time) int64 {
 	return t.UnixNano() / int64(time.Millisecond)
+}
+
+// getAPIEndpoint return the base endpoint of the Rest API according the UseTestnet flag
+func getAPIEndpoint() string {
+	if binance.UseTestnet {
+		return baseAPITestnetURL
+	}
+	return baseAPIMainURL
 }
