@@ -7,7 +7,6 @@ import (
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
-	"github.com/Zamzam-Technology/go-binance/v2"
 	"github.com/Zamzam-Technology/go-binance/v2/common"
 	"io"
 	"io/ioutil"
@@ -28,6 +27,9 @@ const (
 
 	defaultTimeout = 5 * time.Second
 )
+
+// UseTestnet switch all the API endpoints from production to the testnet
+var UseTestnet = false
 
 type doFunc func(req *http.Request) (*http.Response, error)
 
@@ -448,7 +450,7 @@ func FormatTimestamp(t time.Time) int64 {
 
 // getAPIEndpoint return the base endpoint of the Rest API according the UseTestnet flag
 func getAPIEndpoint() string {
-	if binance.UseTestnet {
+	if UseTestnet {
 		return baseAPITestnetURL
 	}
 	return baseAPIMainURL
