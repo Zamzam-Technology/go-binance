@@ -1,6 +1,7 @@
 package binance
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -62,9 +63,9 @@ func (s *exchangeInfoServiceTestSuite) TestExchangeInfo() {
 	symbols := []string{"ETHBTC", "LTCBTC"}
 	s.assertReq(func(r *request) {
 		e := newRequest().setParams(map[string]interface{}{
-			"symbol":  symbol,
-			"symbols": symbols,
+			"symbol": symbol,
 		})
+		e.setParam("symbols", strings.Join(symbols, ","))
 		s.assertRequestEqual(e, r)
 	})
 	res, err := s.client.NewExchangeInfoService().Symbol(symbol).Symbols(symbols...).Do(newContext())

@@ -3,6 +3,7 @@ package binance
 import (
 	"context"
 	"encoding/json"
+	"strings"
 )
 
 // ExchangeInfoService exchange info service
@@ -36,7 +37,7 @@ func (s *ExchangeInfoService) Do(ctx context.Context, opts ...RequestOption) (re
 		m["symbol"] = s.symbol
 	}
 	if len(s.symbols) != 0 {
-		m["symbols"] = s.symbols
+		r.setParam("symbols", strings.Join(s.symbols, ","))
 	}
 	r.setParams(m)
 	data, err := s.c.callAPI(ctx, r, opts...)
