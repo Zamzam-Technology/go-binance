@@ -1,6 +1,7 @@
 package binance
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -65,7 +66,7 @@ func (s *exchangeInfoServiceTestSuite) TestExchangeInfo() {
 		e := newRequest().setParams(map[string]interface{}{
 			"symbol": symbol,
 		})
-		e.setParam("symbols", strings.Join(symbols, ","))
+		e.setParam("symbols", fmt.Sprintf("[%s]", strings.Join(symbols, ",")))
 		s.assertRequestEqual(e, r)
 	})
 	res, err := s.client.NewExchangeInfoService().Symbol(symbol).Symbols(symbols...).Do(newContext())
