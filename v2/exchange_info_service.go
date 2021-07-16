@@ -38,7 +38,7 @@ func (s *ExchangeInfoService) Do(ctx context.Context, opts ...RequestOption) (re
 		m["symbol"] = s.symbol
 	}
 	if len(s.symbols) != 0 {
-		r.setParam("symbols", fmt.Sprintf("[%s]", strings.Join(s.symbols, ",")))
+		r.setParam("symbols", fmt.Sprintf("[\"%s\"]", strings.Join(s.symbols, "\",\"")))
 	}
 	r.setParams(m)
 	data, err := s.c.callAPI(ctx, r, opts...)
